@@ -1,0 +1,94 @@
+[
+  {
+    "name": "apache_commons-lang",
+    "url": "https://github.com/apache/commons-lang.git"
+  },
+  {
+    "name": "apache_commons-io",
+    "url": "https://github.com/apache/commons-io.git"
+  },
+  {
+    "name": "apache_commons-dbcp",
+    "url": "https://github.com/apache/commons-dbcp.git"
+  },
+  {
+    "name": "apache_commons-net",
+    "url": "https://github.com/apache/commons-net.git"
+  },
+  {
+    "name": "apache_commons-math",
+    "url": "https://github.com/apache/commons-math.git"
+  },
+  {
+    "name": "davidmoten_rxjava-extras",
+    "url": "https://github.com/davidmoten/rxjava-extras.git"
+  },
+  {
+    "name": "sonyxperiadev_gerrit-events",
+    "url": "https://github.com/sonyxperiadev/gerrit-events.git"
+  },
+  {
+    "name": "apache_commons-collections",
+    "url": "https://github.com/apache/commons-collections.git"
+  },
+  {
+    "name": "apache_commons-imaging",
+    "url": "https://github.com/apache/commons-imaging.git"
+  },
+  {
+    "name": "apache_commons-codec",
+    "url": "https://github.com/apache/commons-codec.git"
+  },
+  {
+    "name": "apache_commons-configuration",
+    "url": "https://github.com/apache/commons-configuration.git"
+  },
+  {
+    "name": "asterisk-java_asterisk-java",
+    "url": "https://github.com/asterisk-java/asterisk-java.git"
+  },
+  {
+    "name": "apache_commons-compress",
+    "url": "https://github.com/apache/commons-compress.git"
+  },
+  {
+    "name": "alibaba_fastjson",
+    "url": "https://github.com/alibaba/fastjson.git"
+  },
+  {
+    "name": "lmdbjava_lmdbjava",
+    "url": "https://github.com/lmdbjava/lmdbjava.git"
+  },
+  {
+    "name": "brettwooldridge_HikariCP",
+    "url": "https://github.com/brettwooldridge/HikariCP.git"
+  },
+  {
+    "name": "bullhorn_sdk-rest",
+    "url": "https://github.com/bullhorn/sdk-rest.git"
+  },
+  {
+    "name": "tabulapdf_tabula-java",
+    "url": "https://github.com/tabulapdf/tabula-java.git"
+  },
+  {
+    "name": "jenkinsci_email-ext-plugin",
+    "url": "https://github.com/jenkinsci/email-ext-plugin.git"
+  },
+  {
+    "name": "apache_commons-pool",
+    "url": "https://github.com/apache/commons-pool.git"
+  },
+  {
+    "name": "apache_commons-beanutils",
+    "url": "https://github.com/apache/commons-beanutils.git"
+  },
+  {
+    "name": "finmath_finmath-lib",
+    "url": "https://github.com/finmath/finmath-lib.git"
+  },
+  {
+    "name": "logic-ng_LogicNG",
+    "url": "https://github.com/logic-ng/LogicNG.git"
+  }
+]

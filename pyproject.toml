@@ -1,0 +1,76 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ijacoco-research"
+dynamic = ["version"]
+description = "Research scripts for ijacoco"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [{ name = "Anonymous Author" }]
+classifiers = [
+    "Topic :: Utilities",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX :: Linux",
+]
+dependencies = [
+    "pandas",
+    "seutil>=0.8.8",
+    "matplotlib",
+    "tabulate",
+    "seaborn",
+]
+
+[project.optional-dependencies]
+dev = ["hatch", "pytest>=6", "pytest-cov", "coverage[toml]", "black", "ruff"]
+# TODO: (optional) add more optional dependencies in the same format of `dev`; if you want them installed in the dev environment, modify the pip install line in prepare-env.sh into `pip install -e .[dev,optional1,optional2]`
+
+[project.urls]
+# TODO: setup and add documentation link, e.g., readthedocs (but usually after developing some code)  # Documentation = ""
+
+[tool.hatch.version]
+path = "src/ijacoco/__about__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ijacoco"]
+
+# testing (pytest) and coverage (coverage, pytest-cov)
+[tool.coverage.run]
+source_pkgs = ["ijacoco", "tests"]
+branch = true
+parallel = true
+omit = ["src/ijacoco/__about__.py"]
+
+[tool.coverage.paths]
+ijacoco = ["src/ijacoco", "*/ijacoco/src/ijacoco"]
+tests = ["tests", "*/ijacoco/tests"]
+
+[tool.coverage.report]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+
+[tool.pytest.ini_options]
+addopts = "--ignore=deprecated --cov --cov-report xml:cov.xml"
+testpaths = ["tests"]
+
+# formatting (black)
+[tool.black]
+target-version = ["py38"]
+line-length = 120
+
+# linting (ruff)
+[tool.ruff]
+target-version = "py38"
+line-length = 120
+select = [
+    "E", # pycodestyle error
+    "F", # pyflakes
+    "I", # isort
+]
+
+[tool.ruff.isort]
+known-first-party = ["ijacoco"]

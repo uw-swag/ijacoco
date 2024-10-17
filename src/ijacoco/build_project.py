@@ -107,8 +107,8 @@ class ProjectBuilder:
         logger.info(f"Experimenting on {project} using {coverage_choice} with suffix {suffix}.")
 
         # mvn clean install ijacoco/bjacoco
-        if coverage_choice in ["ijacoco", "bjacoco"]:
-            self.install_ibjacoco_git(coverage_choice)
+        # if coverage_choice in ["ijacoco", "bjacoco"]:
+        #     self.install_ibjacoco_git(coverage_choice)
             # # install from jar
             # self.install_ibjacoco(coverage_choice)
 
@@ -340,7 +340,6 @@ class ProjectBuilder:
             "report": event2dur.get("report", 0),
         }
 
-    # install ijacoco and bjacoco to "lib"
     def install_ibjacoco_git(self, choice: str):
         if choice == "ijacoco":
             if not Path("ijacoco").exists():

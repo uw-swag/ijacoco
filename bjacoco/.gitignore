@@ -1,0 +1,7 @@
+target/
+.settings/
+!org.bjacoco.core/.settings/
+!org.bjacoco.core.test/.settings/
+org.bjacoco.agent/src/bjacocoagent.jar
+.idea
+*.iml

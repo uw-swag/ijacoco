@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Copyright (c) 2009, 2020 Mountainminds GmbH & Co. KG and Contributors
+   This program and the accompanying materials are made available under
+   the terms of the Eclipse Public License 2.0 which is available at
+   http://www.eclipse.org/legal/epl-2.0
+
+   SPDX-License-Identifier: EPL-2.0
+
+   Contributors:
+      Evgeny Mandrikov - initial API and implementation
+-->
+<assembly>
+  <id>distribution</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <files>
+    <file>
+      <source>${basedir}/../org.bjacoco.report/src/org/bjacoco/report/xml/report.dtd</source>
+      <outputDirectory>/coverage</outputDirectory>
+    </file>
+  </files>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>lib</outputDirectory>
+      <outputFileNameMapping>bjacocoagent.jar</outputFileNameMapping>
+      <useProjectArtifact>false</useProjectArtifact>
+      <includes>
+        <include>${project.groupId}:org.bjacoco.agent:*:runtime</include>
+      </includes>
+    </dependencySet>
+    <dependencySet>
+      <outputDirectory>lib</outputDirectory>
+      <outputFileNameMapping>${artifact.artifactId}-${qualified.bundle.version}.${artifact.extension}</outputFileNameMapping>
+      <useProjectArtifact>false</useProjectArtifact>
+      <includes>
+        <include>${project.groupId}:org.bjacoco.core</include>
+        <include>${project.groupId}:org.bjacoco.report</include>
+        <include>${project.groupId}:org.bjacoco.agent</include>
+        <include>${project.groupId}:org.bjacoco.ant</include>
+      </includes>
+      <excludes>
+        <exclude>${project.groupId}:org.bjacoco.agent:*:runtime</exclude>
+        <exclude>${project.groupId}:org.bjacoco.ant:*:nodeps</exclude>
+      </excludes>
+    </dependencySet>
+  </dependencySets>
+</assembly>

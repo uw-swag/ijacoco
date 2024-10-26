@@ -19,10 +19,6 @@ class ResultsPaperGenerator:
         self.work_dir = work_dir
 
         projects = [project["name"] for project in su.io.load(self.work_dir / "projects/projects.json")]
-        projects_discard = ['jenkinsci_email-ext-plugin']
-
-        for i in projects_discard:
-            projects.remove(i)
 
         self.projects = projects
 

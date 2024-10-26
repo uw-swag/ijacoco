@@ -72,10 +72,6 @@
     "url": "https://github.com/tabulapdf/tabula-java.git"
   },
   {
-    "name": "jenkinsci_email-ext-plugin",
-    "url": "https://github.com/jenkinsci/email-ext-plugin.git"
-  },
-  {
     "name": "apache_commons-pool",
     "url": "https://github.com/apache/commons-pool.git"
   },

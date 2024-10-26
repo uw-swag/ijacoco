@@ -8,23 +8,6 @@
     ]
   },
   {
-    "name": "jenkinsci_email-ext-plugin",
-    "versions": [
-      "8d7719de",
-      "06efc585",
-      "fb2ca7be",
-      "d80b5c5f",
-      "117a9dc6",
-      "ac0745ad",
-      "0b825977",
-      "f4961104"
-    ],
-    "pom_config": {
-      "type": "plugin",
-      "content": "<plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-antrun-plugin</artifactId><version>1.8</version></plugin>"
-    }
-  },
-  {
     "name": "finmath_finmath-lib",
     "exclude_tests": [
       "LIBORMarketModelCalibrationTest.java",

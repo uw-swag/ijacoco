@@ -103,24 +103,6 @@ python -m ijacoco.build_project --work_dir ./_work exp_project --project apache_
 python -m ijacoco.build_project --work_dir ./_work exp_project --project apache_commons-collections --coverage_choice ekstazi
 ```
 
-### Tables and Plots Generation
-
-#### Tables:
-
-Generates all tables in the paper and updates the numbers from csv files in `_work/paper_data`. Assuming to be executed at the project root directory; otherwise, provide `--work_dir` and `--paper_dir`. For example: 
-
-```
-python -m ijacoco.paper.results all_tables
-```
-
-#### Plots:
-
-Generates execution time, speedup, coverage and test selection rate plots. Pass in `_work` directory and paper directory as arguments. For example: 
-
-```
-python -m ijacoco.paper.plots --work_dir ./_work --paper_dir ../ijacoco-paper/ make_plots
-```
-
 ## Dataset
 
 Below is the structure of the dataset, relative to the work directory `_work`:

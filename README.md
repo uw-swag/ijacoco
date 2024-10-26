@@ -1,9 +1,12 @@
 # ijacoco
 
-Speeding up code coverage computation with regression test selection.
+iJaCoCo is an incremental code coverage analysis tool for Java that builds on JaCoCo and Ekstazi, the state-of-the-art tools for code coverage analysis and regression test selection (RTS), respectively. Traditional code coverage tools like JaCoCo recompute coverage by executing all tests on each code change, which is time-consuming. iJaCoCo addresses this inefficiency by executing only a minimal subset of tests that are affected by code changes, reducing overhead and accelerating the analysis. Evaluated across 1,122 versions from 22 open-source repositories, iJaCoCo achieves speedups of 1.86× on average and up to 8.20× compared to JaCoCo, without sacrificing accuracy​. 
 
-- ijacoco: [repo](https://github.com/kaiyuanw/iJaCoCo) [diff based on jacoco](https://github.com/kaiyuanw/iJaCoCo/compare/a20dc090fc5a0531da5b65ed454426b122374a56...master)
-- bjacoco (baseline jacoco where ijacoco was forked from): [repo](https://github.com/kaiyuanw/bJaCoCo) [diff based on jacoco (just renaming)](https://github.com/kaiyuanw/bJaCoCo/compare/c76e6212bd23118d93ce5534b3cdac445e33df99...main)
+iJaCoCo is presented in the following ASE 2024 paper:
+
+Title: [Efficient Incremental Code Coverage Analysis for Regression Test Suites]()
+
+Authors: Jiale Amber Wang, Kaiyuan Wang, Pengyu Nie
 
 ## Table of Contents
 
@@ -11,11 +14,7 @@ Speeding up code coverage computation with regression test selection.
 - [Installation](#installation)
 - [Usage](#usage)
 - [Dataset](#dataset)
-
-## Repositories list
-
-- The list of repositories used in our study is in `_work/projects/projects.json`.
-- For each repository, we have a list of versions used for experimenting in the directory `_work/finerts-shas`.
+- [Citation](#citation)
 
 ## Requirments
 
@@ -26,7 +25,7 @@ Speeding up code coverage computation with regression test selection.
 
 ## Installation
 
-Ensure the following commands can be found in PATH: conda, mvn. Then, you can install a conda environment for the experiment by running the following script:
+Ensure the following commands can be found in PATH: `conda`, `mvn`. Then, you can install a conda environment for the experiment by running the following script:
 
 ```
 chmod +x ./prepare-env.sh
@@ -43,6 +42,10 @@ conda activate ijacoco-research
 
 This section includes commands for running the experiments.
 Unless otherwise specified, all commands should be run in the home directory `ijacoco/` and with the ijacoco-reseach conda environment activated.
+
+To fairly compare the performance of iJaCoCo and JaCoCo, we forked the JaCoCo tool at the same version as the one iJaCoCo was built on, and renamed the tool name to bjacoco to avoid interference with existing JaCoCo configurations. 
+The source code for iJaCoCo and bJaCoCo are in `ijacoco/ijacoco` and `ijacoco/bjacoco` respectively. 
+
 
 ### Running all projects' all versions
 
@@ -104,7 +107,7 @@ python -m ijacoco.build_project --work_dir ./_work exp_project --project apache_
 
 #### Tables:
 
-Generates all tables in the paper, update the numbers from csv files in `_work/paper_data`. Assuming to be executed at the project root directory; otherwise, provide `--work_dir` and `--paper_dir`. For example: 
+Generates all tables in the paper and updates the numbers from csv files in `_work/paper_data`. Assuming to be executed at the project root directory; otherwise, provide `--work_dir` and `--paper_dir`. For example: 
 
 ```
 python -m ijacoco.paper.results all_tables
@@ -128,8 +131,6 @@ Below is the structure of the dataset, relative to the work directory `_work`:
     - `average_data.csv`: average coverage summary results across multiple runs
     - `_log_$i.tar.gz` (dvc): execution logs for the `$i`-th run
   - `average_data.csv`: average coverage summary results combining all profiles and runs
-  - `comparison_data_$i.csv`: comparison of coverage between `ijacoco` and `bjacoco` for the `$i`-th run
-  - `comparison_data_average.csv`: comparison of coverage between `ijacoco` and `bjacoco` averaged across multiple runs
   - `plot_$i.png`: coverage plots for the `$i`-th run
   - `plot_average.png`: coverage plots averaged across multiple runs
 - `projects/`: list of projects used in the study
@@ -137,6 +138,15 @@ Below is the structure of the dataset, relative to the work directory `_work`:
   - `projects_config.json`: special configurations for some of the projects
 - `finerts-shas/`: list of versions used for each project, following those used by FineRTS
 
+## Citation 
+```
+@inproceedings{WangASE24iJaCoCo,
+  title =        {Efficient Incremental Code Coverage Analysis for Regression Test Suites},
+  author =       {Jiale Amber Wang, Kaiyuan Wang, Pengyu Nie},
+  booktitle =    {International Conference on Automated Software Engineering},
+  year =         {2024},
+}
+```
 ### dvc
 
 Some of the large files are stored using [dvc](https://dvc.org/doc), marked with (dvc). Those files (e.g., `large.tgz`) are not tracked by git (in fact, they are git-ignored), but their pointer files (e.g., `large.tgz.dvc`) are tracked by git and contains the hash of the large file being stored.

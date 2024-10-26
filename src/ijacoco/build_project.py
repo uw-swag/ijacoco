@@ -9,7 +9,7 @@ import pandas as pd
 import seutil as su
 from jsonargparse import CLI
 
-from ijacoco.config_helper import add_to_dvc, remove_java_files, save_reports
+from ijacoco.config_helper import remove_java_files, save_reports
 from ijacoco.maven_utils import check_jacoco_exists, pom_add_profile, update_pom_config
 from ijacoco.plot_and_read_coverage import (
     calculate_average,
@@ -106,12 +106,6 @@ class ProjectBuilder:
     ):
         logger.info(f"Experimenting on {project} using {coverage_choice} with suffix {suffix}.")
 
-        # mvn clean install ijacoco/bjacoco
-        # if coverage_choice in ["ijacoco", "bjacoco"]:
-        #     self.install_ibjacoco_git(coverage_choice)
-            # # install from jar
-            # self.install_ibjacoco(coverage_choice)
-
         # if the project not be cloned yet, clone the project to "_downloads" directory
         project_directory = self.work_dir / "_downloads" / project
         su.io.mkdir(project_directory.parent)
@@ -175,7 +169,7 @@ class ProjectBuilder:
         su.bash.run(f"rm -r {data_directory}/_log_{suffix}", check_returncode=0)
 
     # run experiments for 5 times on a list of projects(projects.json) with selected coverage_choice,
-    # retestall as default. Logs are are stored to dvc.
+    # retestall as default. 
     def exp_projects(
         self,
         coverage_choice: Optional[str] = "retestall",
@@ -199,7 +193,7 @@ class ProjectBuilder:
                     self.exp_project(project_name, suffix)
 
                 if not (
-                    self.work_dir / f"results/{project_name}/{coverage_choice}_data/_log_{suffix}.tar.gz.dvc"
+                    self.work_dir / f"results/{project_name}/{coverage_choice}_data/_log_{suffix}.tar.gz"
                 ).exists():
                     logger.info(f"{project_name}, {suffix}")
                     all = False
@@ -207,10 +201,6 @@ class ProjectBuilder:
             # when all 5 runs finished, calculate the average
             if all:
                 calculate_average(project_name, coverage_choice, num_exp)
-
-        # add the log.tar.gz content to dvc
-        # need to run "push dvc" after it, requires passphrase
-        add_to_dvc()
 
     # check and log any test failures
     def check_test_failures(self, result: str, data_directory: str, project_name: str, version: str, suffix: str):
@@ -339,66 +329,6 @@ class ProjectBuilder:
             "execution+collection": sum(duration for event, duration in event2dur.items() if event.startswith("test:")),
             "report": event2dur.get("report", 0),
         }
-
-    def install_ibjacoco_git(self, choice: str):
-        if choice == "ijacoco":
-            if not Path("ijacoco").exists():
-                ijacoco_url = "git@github.com:kaiyuanw/iJaCoCo.git"
-                su.bash.run(f"git clone {ijacoco_url} ijacoco", check_returncode=0)
-                logger.info(f"Successfully cloned {choice}")
-            with su.io.cd("ijacoco"):
-                su.bash.run("git pull", check_returncode=0)
-                su.bash.run("git checkout master", check_returncode=0)
-
-        if choice == "bjacoco":
-            if not Path("bjacoco").exists():
-                bjacoco_url = "git@github.com:kaiyuanw/bJaCoCo.git"
-                su.bash.run(f"git clone {bjacoco_url} bjacoco", check_returncode=0)
-                logger.info(f"Successfully cloned {choice}")
-            with su.io.cd("bjacoco"):
-                su.bash.run("git pull", check_returncode=0)
-                su.bash.run("git checkout main", check_returncode=0)
-
-        # maven clean install iJacoco or bJacoco
-        with su.io.cd(choice):
-            logger.info(f"Running mvn clean install on {choice}")
-            su.bash.run("mvn clean install", check_returncode=0).stdout
-
-    # install ijacoco and bjacoco from jar files
-    def install_ibjacoco(self, choice: str):
-        if choice == "ijacoco":
-            maven_ijacoco_target_directory = Path.home() / ".m2" / "repository" / "org" / "ijacoco"
-            ijacoco_jar_file = "ijacoco-maven-plugin-1.0.0-jar-with-dependencies.jar"
-
-            # copy jar file and pom.xml from ijacoco repository to loacl Maven repository
-            su.bash.run(f"cp {ijacoco_jar_file} {maven_ijacoco_target_directory}", check_returncode=0)
-            su.bash.run(f"cp ./pom_ijacoco.xml {maven_ijacoco_target_directory}/pom.xml", check_returncode=0)
-
-            # install the plugin
-            print("Installing iJaCoCo Maven Plugin")
-            su.bash.run(
-                "mvn org.apache.maven.plugins:maven-install-plugin:3.1.2:install-file "
-                f"-Dfile={maven_ijacoco_target_directory}/{ijacoco_jar_file} "
-                f"-DpomFile={maven_ijacoco_target_directory}/pom.xml",
-                check_returncode=0,
-            )
-
-        if choice == "bjacoco":
-            maven_bjacoco_target_directory = Path.home() / ".m2" / "repository" / "org" / "bjacoco"
-            bjacoco_jar_file = "bjacoco-maven-plugin-0.8.6-jar-with-dependencies.jar"
-
-            # copy jar file and pom.xml from ijacoco repository to loacl Maven repository
-            su.bash.run(f"cp {bjacoco_jar_file}  {maven_bjacoco_target_directory}", check_returncode=0)
-            su.bash.run(f"cp ./pom_bjacoco.xml  {maven_bjacoco_target_directory}/pom.xml", check_returncode=0)
-
-            # install the plugin
-            print("Installing bJaCoCo Maven Plugin")
-            su.bash.run(
-                "mvn org.apache.maven.plugins:maven-install-plugin:3.1.2:install-file "
-                f"-Dfile={maven_bjacoco_target_directory}/{bjacoco_jar_file} "
-                f"-DpomFile={maven_bjacoco_target_directory}/pom.xml",
-                check_returncode=0,
-            )
 
 
 if __name__ == "__main__":

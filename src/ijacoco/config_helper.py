@@ -30,19 +30,3 @@ def save_reports(data_directory, project_directory, coverage_choice, version, su
         su.bash.run(f"cp -r {coverage_repo_folder} {destination_folder}", check_returncode=0)
     su.bash.run(f"cp -r {surefire_repo_foler} {destination_folder}", check_returncode=0)
     logger.info("Folders copied.")
-
-def add_to_dvc():
-    cwd = os.getcwd()
-    pattern = r'_log_[^.]+\.tar\.gz$'
-    tar_gz_file_list = []
-    for root, dirs, files in os.walk(cwd):
-        for filename in files:
-            if re.match(pattern, filename):
-                file_path = os.path.join(root, filename)
-                relative_path = os.path.relpath(file_path, cwd)
-                tar_gz_file_list.append(relative_path)
-                if not os.path.exists(relative_path+".dvc"):
-                    print(relative_path)
-                    su.bash.run(f"dvc add {relative_path}", check_returncode=0)
-    # res = su.bash.run(f"dvc push", check_returncode=0).stdout
-    # print(res) 

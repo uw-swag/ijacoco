@@ -16,7 +16,7 @@ Authors: Jiale Amber Wang, Kaiyuan Wang, Pengyu Nie
 - [Dataset](#dataset)
 - [Citation](#citation)
 
-## Requirments
+## Requirements
 
 - Linux operating system
 - Anaconda or Miniconda
@@ -129,7 +129,7 @@ Below is the structure of the dataset, relative to the work directory `_work`:
   - `$profile_data/`: results for the `$profile` in {`retestall`, `ijacoco`, `bjacoco`, `ekstazi`}
     - `$i_$profile_data.csv`: coverage summary results for the `$i`-th run
     - `average_data.csv`: average coverage summary results across multiple runs
-    - `_log_$i.tar.gz` (dvc): execution logs for the `$i`-th run
+    - `_log_$i.tar.gz`: execution logs for the `$i`-th run
   - `average_data.csv`: average coverage summary results combining all profiles and runs
   - `plot_$i.png`: coverage plots for the `$i`-th run
   - `plot_average.png`: coverage plots averaged across multiple runs
@@ -147,32 +147,3 @@ Below is the structure of the dataset, relative to the work directory `_work`:
   year =         {2024},
 }
 ```
-### dvc
-
-Some of the large files are stored using [dvc](https://dvc.org/doc), marked with (dvc). Those files (e.g., `large.tgz`) are not tracked by git (in fact, they are git-ignored), but their pointer files (e.g., `large.tgz.dvc`) are tracked by git and contains the hash of the large file being stored.
-
-The recommended way to install dvc is through pipx (because dvc is written in Python), assuming you have sudo access:
-
-- `sudo apt update && sudo apt install pipx` (or check [pipx installation](https://pipx.pypa.io/latest/installation/) for other OS)
-- `pipx install dvc[all] && pipx ensurepath`
-
-Usage of dvc:
-
-- To add/update a file to dvc: `dvc add large.tgz`
-  - This will create/update `large.tgz.dvc` and `.gitignore`, which should be committed to git
-  - Similar to git, doing dvc add only checks in the files to a local cache (`.dvc/cache` by default) without sending them to remote yet
-- To push the cached files to remote: `dvc push`
-  - The remote storage for this repo is the login node of arbutus (configured in `.dvc/config`)
-- To download a file from remote: `dvc pull large.tgz` or `dvc pull large.tgz.dvc` (or `dvc pull` with multiple files)
-  - Be careful: `dvc pull` without arguments will (by default) download all files in the repo which can be slow
-
-Maintenance notes when you are running out of space (locally or on the remote):
-
-- To clean up the local cache (to keep only currently used files): `dvc gc -w`
-- Once the cache is pushed, you can safely delete the local cache: `rm -rf .dvc/cache` (.dvc is located at the root of the repo)
-- You may also not want to keep all history versions of the large files even on remote servers; `dvc gc -c` will help you do that and there are a couple of options:
-  - Keep only the files used by the current workspace (i.e., the latest version if your git status is clean): `dvc gc -c -w`
-  - Keep the files used by the last n commits: `dvc gc -c -n n`
-  - Keep the files used by all branches: `dvc gc -c --all-branches`
-  - Keep the files used by all tags: `dvc gc -c --all-tags`
-  - See [dvc gc doc](https://dvc.org/doc/command-reference/gc) for more options

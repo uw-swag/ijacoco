@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Check the following pre-requisites for running ijacoco experiments:
+# Check the following prerequisites for running ijacoco experiments:
 # conda: for using python scripts
 # java (version 8) and mvn (==3.9) for building ijacoco and used java projects
+# cloc: for counting lines of code
 
-_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-
+_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 function main() {
-        echo "Checking pre-requisites..."
+        echo "Checking prerequisites..."
 
         echo "--- conda ---"
         local conda_installed=false
@@ -75,22 +75,32 @@ function main() {
                 fi
         fi
 
-        echo
-        echo "=== Summary ==="
-        if [[ ${conda_installed} == true ]]; then
-                echo "✅ You are ready to use the python part of the code. Next step: './prepare-env.sh'"
+        echo "--- cloc ---"
+        local cloc_installed=false
+        local cloc_exe=$(which cloc)
+        if [[ -z ${cloc_exe} ]]; then
+                echo "❌ Not Found"
+                echo "  Hint: please install cloc"
         else
-                echo "❌ You don't have conda installed. Proceed only if you know how to set up the python environment yourself (our build file is pyproject.toml)"
+                cloc_installed=true
+                echo "✅ OK"
+                echo "  -> cloc executable at ${cloc_exe}"
         fi
 
-        if [[ ${java_version_ok} == true && ${mvn_version_ok} == true ]]; then
-                echo "✅ You are ready to use the java part of the code. They will be automatically built during our python scripts."
-        else 
-                if [[ ${java_installed} == true && ${mvn_installed} == true ]]; then
-                        echo "❓ You have java and maven but not the correct version. Our code may not work as expected."
+        echo
+        echo "=== Summary ==="
+        if [[ ${conda_installed} == true && ${cloc_installed} == true ]]; then
+                if [[ ${java_version_ok} == true && ${mvn_version_ok} == true ]]; then
+                        echo "✅ You meet all the prerequisites."
                 else
-                        echo "❌ You won't be able to run the part of code that uses java"
+                        if [[ ${java_installed} == true && ${mvn_installed} == true ]]; then
+                                echo "❓ You have java and maven but not the correct version. Our code may not work as expected."
+                        else
+                                echo "❌ You are missing some prerequisites, please check the above messages for details."
+                        fi
                 fi
+        else
+                echo "❌ You are missing some prerequisites, please check the above messages for details."
         fi
 }
 

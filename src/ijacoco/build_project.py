@@ -20,10 +20,24 @@ logger = su.log.get_logger(__name__)
 
 
 class ProjectBuilder:
-    def __init__(self, work_dir: su.arg.RPath, debug_ekstazi: bool = False, debug_ijacoco: bool = False):
-        self.work_dir = work_dir
+    def __init__(
+        self, work_dir: Optional[su.arg.RPath] = None, debug_ekstazi: bool = False, debug_ijacoco: bool = False
+    ):
+        self.proj_dir = Path(__file__).parent.parent.parent
+        self.work_dir = work_dir if work_dir is not None else self.proj_dir / "_work"
         self.debug_ekstazi = debug_ekstazi
         self.debug_ijacoco = debug_ijacoco
+        self.ensure_ijacoco_bjacoco()
+
+    def ensure_ijacoco_bjacoco(self):
+        if not (Path.home() / ".m2/repository/org/ijacoco/ijacoco-maven-plugin").exists():
+            logger.info("Maven installing ijacoco...")
+            with su.io.cd(self.proj_dir / "ijacoco"):
+                su.bash.run("mvn clean install", check_returncode=0)
+        if not (Path.home() / ".m2/repository/org/bjacoco/bjacoco-maven-plugin").exists():
+            logger.info("Maven installing bjacoco...")
+            with su.io.cd(self.proj_dir / "bjacoco"):
+                su.bash.run("mvn clean install", check_returncode=0)
 
     # Config the ppom.xml or exclude tests for running expeirments as listed in projects_config.json
     def pom_config(self, project: str, version: str):
@@ -169,7 +183,7 @@ class ProjectBuilder:
         su.bash.run(f"rm -r {data_directory}/_log_{suffix}", check_returncode=0)
 
     # run experiments for 5 times on a list of projects(projects.json) with selected coverage_choice,
-    # retestall as default. 
+    # retestall as default.
     def exp_projects(
         self,
         coverage_choice: Optional[str] = "retestall",
@@ -192,9 +206,7 @@ class ProjectBuilder:
                 else:
                     self.exp_project(project_name, suffix)
 
-                if not (
-                    self.work_dir / f"results/{project_name}/{coverage_choice}_data/_log_{suffix}.tar.gz"
-                ).exists():
+                if not (self.work_dir / f"results/{project_name}/{coverage_choice}_data/_log_{suffix}.tar.gz").exists():
                     logger.info(f"{project_name}, {suffix}")
                     all = False
 

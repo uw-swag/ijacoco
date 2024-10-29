@@ -4,7 +4,7 @@ iJaCoCo is an incremental code coverage analysis tool for Java that builds on Ja
 
 iJaCoCo is presented in the following ASE 2024 paper:
 
-Title: [Efficient Incremental Code Coverage Analysis for Regression Test Suites](WangASE24iJaCoCo.pdf)
+Title: [Efficient Incremental Code Coverage Analysis for Regression Test Suites](WangETAL24iJaCoCo.pdf)
 
 Authors: Jiale Amber Wang, Kaiyuan Wang, Pengyu Nie
 
